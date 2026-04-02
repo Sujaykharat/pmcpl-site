@@ -16,10 +16,8 @@ export function NewspaperScene({ scrollX }: SceneProps) {
       if (scrollX.current && imageRef.current && textRef.current) {
         const progress = Math.min(scrollX.current.currentX / window.innerWidth, 1);
         
-        // Zoom out effect (Camera pulling back)
-        // Starts at 1.8 scale (close up) and goes to 1.1 for subtle depth
-        const scale = 1.8 - progress * 0.7;
-        imageRef.current.style.transform = `scale(${scale})`;
+        // Ensure image doesn't scale to avoid cropping (teammate's change)
+        imageRef.current.style.transform = 'none';
         
         // Parallax and fade for text
         textRef.current.style.opacity = (1 - progress * 1.5).toString();
@@ -37,7 +35,7 @@ export function NewspaperScene({ scrollX }: SceneProps) {
       {/* Background with sepia tint and grain */}
       <div 
         ref={imageRef}
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat grayscale-[0.2] sepia-[0.3]"
+        className="absolute inset-0 z-0 bg-[length:100%_100%] bg-no-repeat grayscale-[0.2] sepia-[0.3]"
         style={{ backgroundImage: `url('/newspaper.jpg')` }}
       />
       
