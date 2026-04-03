@@ -16,8 +16,9 @@ export function NewspaperScene({ scrollX }: SceneProps) {
       if (scrollX.current && imageRef.current && textRef.current) {
         const progress = Math.max(0, Math.min(scrollX.current.currentX / window.innerWidth, 1));
 
-        // 1 & 3: Minimal, seamless transition — upward translation & subtle scale
-        imageRef.current.style.transform = `translateY(${progress * -100}%) scale(${1 - progress * 0.02})`;
+        // Scroll the background vertically to display the full newspaper without blank areas below
+        imageRef.current.style.backgroundPositionY = `${progress * 100}%`;
+        imageRef.current.style.transform = `scale(${1 - progress * 0.02})`;
 
         // 4: Keep text stable, gently fading out & following the upward section move
         textRef.current.style.opacity = (1 - progress * 1.5).toString();
@@ -35,8 +36,8 @@ export function NewspaperScene({ scrollX }: SceneProps) {
       {/* Background with sepia tint and grain */}
       <div
         ref={imageRef}
-        className="absolute inset-0 z-0 bg-[length:100%_100%] bg-no-repeat grayscale-[0.2] sepia-[0.3]"
-        style={{ backgroundImage: `url('/newspaper.jpg')` }}
+        className="absolute inset-0 z-0 bg-[length:100%_auto] bg-top bg-no-repeat grayscale-[0.2] sepia-[0.3]"
+        style={{ backgroundImage: `url('/newspaper.jpg.jpeg')` }}
       />
 
       {/* Gradient overlay for depth */}
