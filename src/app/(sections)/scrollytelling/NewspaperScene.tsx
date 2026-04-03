@@ -14,14 +14,14 @@ export function NewspaperScene({ scrollX }: SceneProps) {
     let animationFrameId: number;
     const update = () => {
       if (scrollX.current && imageRef.current && textRef.current) {
-        const progress = Math.min(scrollX.current.currentX / window.innerWidth, 1);
-        
-        // Ensure image doesn't scale to avoid cropping (teammate's change)
-        imageRef.current.style.transform = 'none';
-        
-        // Parallax and fade for text
+        const progress = Math.max(0, Math.min(scrollX.current.currentX / window.innerWidth, 1));
+
+        // 1 & 3: Minimal, seamless transition — upward translation & subtle scale
+        imageRef.current.style.transform = `translateY(${progress * -100}%) scale(${1 - progress * 0.02})`;
+
+        // 4: Keep text stable, gently fading out & following the upward section move
         textRef.current.style.opacity = (1 - progress * 1.5).toString();
-        textRef.current.style.transform = `translateY(${progress * -80}px) scale(${1 - progress * 0.2})`;
+        textRef.current.style.transform = `translateY(${progress * -100}%) scale(${1 - progress * 0.02})`;
       }
       animationFrameId = requestAnimationFrame(update);
     };
@@ -33,20 +33,42 @@ export function NewspaperScene({ scrollX }: SceneProps) {
   return (
     <section className="scene bg-[#eadcc3]">
       {/* Background with sepia tint and grain */}
-      <div 
+      <div
         ref={imageRef}
         className="absolute inset-0 z-0 bg-[length:100%_100%] bg-no-repeat grayscale-[0.2] sepia-[0.3]"
         style={{ backgroundImage: `url('/newspaper.jpg')` }}
       />
-      
+
       {/* Gradient overlay for depth */}
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#eadcc3]/80 via-transparent to-black/20" />
-      
-      <div 
+
+      <div
         ref={textRef}
-        className="relative z-20 h-full flex flex-col items-center justify-center text-center p-6 md:p-10 pointer-events-none"
+        className="relative z-20 h-full w-full pointer-events-none flex flex-col justify-between"
       >
-        {/* Text has been removed as requested by teammate/user */}
+        {/* Cinematic Top Bar with Elegant Moving Ticker */}
+        <div className="w-full h-12 md:h-16 bg-gradient-to-r from-[#1a1a1a] via-[#333333] to-[#1a1a1a] border-b border-[#eadcc3]/30 flex items-center overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] z-30">
+          <div className="flex w-[200vw] text-[#eadcc3]">
+            <div className="animate-marquee whitespace-nowrap text-xs md:text-sm font-sans tracking-[0.6em] uppercase opacity-70 pt-1">
+              THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦ THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦&nbsp;
+            </div>
+            <div className="animate-marquee whitespace-nowrap text-xs md:text-sm font-sans tracking-[0.6em] uppercase opacity-70 pt-1">
+              THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦ THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦&nbsp;
+            </div>
+          </div>
+        </div>
+
+        {/* Cinematic Bottom Bar with Elegant Moving Ticker */}
+        <div className="w-full h-12 md:h-16 bg-gradient-to-r from-[#1a1a1a] via-[#333333] to-[#1a1a1a] border-t border-[#eadcc3]/30 flex items-center overflow-hidden shadow-[0_-10px_30px_rgba(0,0,0,0.6)] z-30">
+          <div className="flex w-[200vw] text-[#eadcc3]">
+            <div className="animate-marquee whitespace-nowrap text-xs md:text-sm font-sans tracking-[0.6em] uppercase opacity-70 pt-1">
+              THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦ THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦&nbsp;
+            </div>
+            <div className="animate-marquee whitespace-nowrap text-xs md:text-sm font-sans tracking-[0.6em] uppercase opacity-70 pt-1">
+              THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦ THE STORY BEGINS ✦ PIONEERING EXCELLENCE ✦ ESTABLISHED 1995 ✦ EMBRACING THE DIGITAL FUTURE ✦&nbsp;
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
